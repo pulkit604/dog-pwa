@@ -4,7 +4,7 @@
     <div>
       <h3>Enable Notifications</h3>
       <label class="switch">
-        <input type="checkbox" v-model="value">
+        <input type="checkbox" v-model="value" @change="reqPermission()">
         <span class="slider round"></span>
       </label>
     </div>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-
+    import firebase from 'firebase'
     export default {
         name: 'App',
         components: {
@@ -21,6 +21,24 @@
             return {
                 value: false,
             };
+        },
+        methods: {
+
+    reqPermission () {
+        firebase.messaging().requestPermission().then(() => {
+                    console.log('Notification permission granted.')
+                    this.getToken()
+                }).catch((err) => {
+                    console.log('Unable to get permission to notify.', err)
+                })
+            },
+            getToken () {
+                firebase.messaging().getToken().then((currentToken) => {
+                        console.log(currentToken)
+                }).catch((err) => {
+                    console.log('An error occurred while retrieving token. ', err)
+                })
+            },
         },
     }
 </script>
