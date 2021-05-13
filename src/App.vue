@@ -8,6 +8,7 @@
         <span class="slider round"></span>
       </label>
     </div>
+    <span style="color:green; font-size: 20px">{{token}}</span>
   </div>
 </template>
 
@@ -20,6 +21,7 @@
         data() {
             return {
                 value: false,
+                token: '',
             };
         },
         methods: {
@@ -34,7 +36,17 @@
             },
             getToken () {
                 firebase.messaging().getToken().then((currentToken) => {
-                        console.log(currentToken)
+                    /*
+                    if(firebase.firestore().
+                    collection('device-tokens')
+                        .where('key', '==', currentToken).get()
+                        .then(el => {
+                            if(el.size === 0) {
+                                firebase.firestore().collection('device-tokens').add({key:currentToken})
+                            }}))
+                            */
+                        console.log(currentToken);
+                        this.token = currentToken;
                 }).catch((err) => {
                     console.log('An error occurred while retrieving token. ', err)
                 })
